@@ -29,10 +29,30 @@ def scrape_channel(url):
 
 	return df
 
+def update_channel(url, csv_file):
+	df = pd.read_csv(csv_file)
+	driver.get(url)
+		
+	user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
+	links = []
+	for i in user_data:
+		links.append(i.get_attribute('href'))
+	
+	existing_links = df['link'].to_list()
+	
+	for link in links:
+		if link not in existing_links:
+			print(link)
+
+
+			
+
+
 def main():
 	#df = scrape_channel('https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw/videos')
-	df = pd.read_csv('test.csv')
-	download(df)
+	#df = pd.read_csv('test.csv')
+	#download(df)
+	update_channel('https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw/videos', 'test.csv')
 
 if __name__ == '__main__':
 	main()
